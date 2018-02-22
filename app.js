@@ -7,15 +7,13 @@ var totalHeartRate = 0;
 var totalTemp = 0;
 app.get('/', function(req, res){
 
-
     var heartRate = req.query.hr;
     var temp = req.query.temp;
     totalTemp += temp;
     totalHeartRate += heartRate;
     console.log(heartRate);
-
+    res.send("antocoder");
 });
-
 // setInterval(function() {
 
 //     var avgTemp = totalTemp/60;
@@ -24,21 +22,6 @@ app.get('/', function(req, res){
 //     console.log(avgHeartRate);
 
 // }, 1000*60);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
