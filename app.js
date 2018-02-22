@@ -13,6 +13,7 @@ app.get('/', function(req, res){
     totalHeartRate += heartRate;
     console.log(heartRate);
     res.send("antocoder");
+    console.log(req.ip);
 });
 // setInterval(function() {
 
