@@ -24,7 +24,7 @@ function getSampleHeartData() {
 
 }
 
-function checkAnamoly(heartData){
+function checkAnamoly(heartData, req){
     var heartTemp = [];
     var i;
     for(i=0; i<10; i++){
@@ -64,10 +64,10 @@ function checkAnamoly(heartData){
     console.log("djk");
     logreg.train(Xtrain, Ytrain);
     console.log("Trained");
-    console.log(heartMatrix);
+    //console.log(heartMatrix);
     //var Ytest = columnVector[]
     var Yhat = logreg.predict(heartMatrix);
-    console.log(Yhat);
+   // console.log(Yhat);
     return anamoly;
         
 }
@@ -106,7 +106,7 @@ function checkAnamoly(heartData){
 // var Yhat = logreg.predict(Xtest);
 // console.log(Yhat);
 
-function fit(Ytrain){
+function fit(Ytrain, req){
     var one_count, zero_count, i;
     one_count = zero_count = 0;
     for(i = 0; i<10; i++){
@@ -118,8 +118,11 @@ function fit(Ytrain){
         }
     }
     if(one_count >= zero_count){
+        console.log("Anamoly Detected");
+        //console.log(req.ip);
         return 1;
     }else{
+        console.log('No Anamolies');
         return 0;
     }
 }

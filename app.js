@@ -2,6 +2,8 @@ const express = require('express');
 const {Matrix} = require('ml-matrix');
 const LogisticRegression = require('ml-logistic-regression');
 const simulate = require('./playground/logisticRegressionExample.js');
+const say = require('say');
+const request = require('request');
 var heartDataGlobal;
 
 var app = express();
@@ -34,8 +36,31 @@ app.get('/getHeartData', function(req, res){
 
 app.get('/checkAnamoly', function(req, res){
     //console.log(heartDataGlobal);
-    var isAnamoly = simulate.checkAnamoly(heartDataGlobal);
+    console.log(req.ip);
+    var isAnamoly = simulate.checkAnamoly(heartDataGlobal, req);
     res.json({isTrue: isAnamoly});
+    var latitude = '13.0917';
+    var longitude = '79.9728';
+    if(isAnamoly == 1){
+        request({
+            url : `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}8&radius=10000&types=hospital&key=AIzaSyBHDN7Y0J6zxjWHt3cZAev3mzUc8lS5hc0`,
+            json: true,
+        },
+        function(error, response, body) {
+            //console.log(body);
+            console.log("Hospital Name: " + body.results[1].name + " has been notified");
+            request( {
+                    url: `https://maps.googleapis.com/maps/api/place/details/json?placeid=${body.results[1].place_id}&key=AIzaSyBHDN7Y0J6zxjWHt3cZAev3mzUc8lS5hc0`,
+                    json:true,
+                },
+                function(error, response, body){
+                    console.log("Phone No: " + body.result.formatted_phone_number);
+                    say.speak(`Adithan is suffering from a heart abnormality at latitude :${latitude} and longitude ${longitude}`, 'Alex', 0.5);
+                    say.speak(`Adithan is suffering from a heart abnormality at latitude :${latitude} and longitude ${longitude}`, 'Alex', 0.5);
+                }
+            );
+    });
+    }
 });
 
 app.listen(3000);
