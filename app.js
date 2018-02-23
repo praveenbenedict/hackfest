@@ -1,6 +1,9 @@
 const express = require('express');
 const {Matrix} = require('ml-matrix');
 const LogisticRegression = require('ml-logistic-regression');
+const simulate = require('./playground/logisticRegressionExample.js');
+var heartDataGlobal;
+
 var app = express();
 
 var totalHeartRate = 0;
@@ -15,6 +18,24 @@ app.get('/', function(req, res){
     res.send("antocoder");
     console.log(req.ip);
 });
+app.get('/getHeartData', function(req, res){
+    var heartData = simulate.getSampleHeartData();
+    res.json(heartData);
+    heartDataGlobal = heartData;
+    //console.log(heartData);
+    
+});
+
+app.get('/checkAnamoly', function(req, res){
+    //console.log(heartDataGlobal);
+    var isAnamoly = simulate.checkAnamoly(heartDataGlobal);
+    res.json({isTrue: isAnamoly});
+});
+
+app.listen(3000);
+
+
+
 // setInterval(function() {
 
 //     var avgTemp = totalTemp/60;
@@ -37,7 +58,7 @@ app.get('/', function(req, res){
 //     totalHr = 0;
 // }, (1000 * 60 * 10));
 
-app.listen(3000);
+
 
 
 
